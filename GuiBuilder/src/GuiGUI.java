@@ -5,13 +5,20 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JLabel;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import javax.swing.BoxLayout;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
+
 import java.awt.Color;
+import java.awt.Component;
+
 import javax.swing.JButton;
 import javax.swing.JTable;
 import javax.swing.JTextArea;
@@ -128,26 +135,58 @@ public class GuiGUI extends JFrame {
         scrollPane.setBounds(30, 174, 624, 294);
         contentPane.add(scrollPane);
 		
+        
         ArrayList <User> users = JSONHandler.readJSON();
-
-        Object[][] data = new Object[users.size()][];
-        for(int i = 0 ; i < users.size() ; i++){
-        	data[i] = users.get(i).toList();
-        }
         
-        String[] columns = new String[] {"Id", "First Name", "Last Name", "Age"};
-
-        
-        JTable table = new JTable(data, columns);
-        
-        table.setBounds(30, 201, 624, 261);
-        
-        scrollPane.add(table);
+        JTable table = createTable(users);
    
+        scrollPane.add(table);
         
         JButton btnNewButton_1 = new JButton("Update");
         btnNewButton_1.setBounds(144, 140, 117, 29);
         contentPane.add(btnNewButton_1);
+	}
 
+
+	private JTable createTable(ArrayList<User> users) {
+		
+		
+        Object[][] data = new Object[users.size()][];
+        for(int i = 0 ; i < users.size() ; i++){
+        	data[i] = users.get(i).toList();
+        }
+        String[] columns = new String[] {"Id", "First Name", "Last Name", "Age"};
+
+        JTable table = new JTable(data, columns);
+        //Select only one row at the time
+        table.setSelectionModel(new ForcedListSelectionModel());
+        
+        //Set column width
+        table.getColumnModel().getColumn(0).setPreferredWidth(300);
+        table.getColumnModel().getColumn(1).setPreferredWidth(100);
+        table.getColumnModel().getColumn(2).setPreferredWidth(100);
+        table.getColumnModel().getColumn(3).setPreferredWidth(30);
+        
+        //Center Alignment in 3 last columns
+        DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
+        centerRenderer.setHorizontalAlignment( JLabel.CENTER );
+        table.getColumnModel().getColumn(0).setCellRenderer( centerRenderer );
+        table.getColumnModel().getColumn(1).setCellRenderer( centerRenderer );
+        table.getColumnModel().getColumn(2).setCellRenderer( centerRenderer );
+        table.getColumnModel().getColumn(3).setCellRenderer( centerRenderer );
+        
+        table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
+            public void valueChanged(ListSelectionEvent event) {
+            	txtId.setText(table.getValueAt(table.getSelectedRow(), 0).toString());
+            	txtFirstName.setText(table.getValueAt(table.getSelectedRow(), 1).toString());
+            	txtLastName.setText(table.getValueAt(table.getSelectedRow(), 2).toString());
+            	txtAge.setText(table.getValueAt(table.getSelectedRow(), 3).toString());
+                System.out.println(table.getValueAt(table.getSelectedRow(), 0).toString());
+            }
+        });
+        
+        table.setBounds(30, 201, 624, 261);
+        
+        return table;
 	}
 }
