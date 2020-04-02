@@ -88,4 +88,39 @@ public class RESTHandler {
         return null;
 
 	}
+
+	public static ArrayList<User> readJSON(String string) {
+        try {
+        	ObjectMapper objectMapper = new ObjectMapper();
+        	objectMapper.configure(DeserializationFeature.USE_JAVA_ARRAY_FOR_JSON_ARRAY, true);
+        	ArrayList<User> users = objectMapper.readValue(new URL(string), new TypeReference<ArrayList<User>>(){});
+        	System.out.println(users.toString());
+        	return users;
+        	
+    		
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+		
+	}
+	
+	public static ArrayList<User> readIDJSON(String string) {
+        try {
+        	ObjectMapper objectMapper = new ObjectMapper();
+        	User u = objectMapper.readValue(new URL(string), User.class); 
+        	ArrayList<User> users = new ArrayList<User>();
+        	users.add(u);
+        	System.out.println(users.toString());
+        	return users;
+        	
+    		
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
+		
+	}
 }

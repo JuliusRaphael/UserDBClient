@@ -44,7 +44,12 @@ public class GuiGUI extends JFrame {
 	private JTable table;
 	private ArrayList <User> users;
 	private ScrollPane scrollPane;
-
+	private JCheckBox chckbxId;
+	private JCheckBox chckbxFirstName;
+	private JCheckBox chckbxLastName;
+	private JCheckBox chckbxAge;
+	
+	
 	/**
 	 * Create the frame.
 	 * @param s 
@@ -58,23 +63,23 @@ public class GuiGUI extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("Filter by:");
+		JLabel lblNewLabel = new JLabel("Search:");
 		lblNewLabel.setBounds(20, 20, 61, 16);
 		contentPane.add(lblNewLabel);
 		
-		JCheckBox chckbxId = new JCheckBox("Id");
+		chckbxId = new JCheckBox("Id");
 		chckbxId.setBounds(30, 48, 128, 23);
 		contentPane.add(chckbxId);
 		
-		JCheckBox chckbxFirstName = new JCheckBox("First Name");
+		chckbxFirstName = new JCheckBox("First Name");
 		chckbxFirstName.setBounds(30, 69, 128, 23);
 		contentPane.add(chckbxFirstName);
 		
-		JCheckBox chckbxLastName = new JCheckBox("Last Name");
+		chckbxLastName = new JCheckBox("Last Name");
 		chckbxLastName.setBounds(30, 89, 128, 23);
 		contentPane.add(chckbxLastName);
 		
-		JCheckBox chckbxAge = new JCheckBox("Age");
+		chckbxAge = new JCheckBox("Age");
 		chckbxAge.setBounds(30, 111, 128, 23);
 		contentPane.add(chckbxAge);
 		
@@ -98,7 +103,7 @@ public class GuiGUI extends JFrame {
 		filterAgeInput.setBounds(134, 110, 130, 26);
 		contentPane.add(filterAgeInput);
 		
-		txtId = new JTextField();
+		txtId = new JTextField(64);
 		txtId.setEditable(false);
 		txtId.setText("Id");
 		txtId.setBounds(430, 47, 130, 26);
@@ -148,9 +153,18 @@ public class GuiGUI extends JFrame {
         });
 		
         
-        JButton btnNewButton_1 = new JButton("Filter");
+        
+        JButton btnNewButton_1 = new JButton("Search");
         btnNewButton_1.setBounds(144, 140, 117, 29);
         contentPane.add(btnNewButton_1);
+        btnNewButton_1.addActionListener(new ActionListener() { 
+        	public void actionPerformed(ActionEvent e) { 
+        		users = readFilter();
+        		table = createTable(users);
+                scrollPane.add(table);
+        		
+        	} 
+        });
         
         
         
@@ -247,5 +261,48 @@ public class GuiGUI extends JFrame {
 		txtFirstName.setText("");
 		txtLastName.setText("");
 		txtAge.setText("");
+	}
+	
+	public void emptyFilters(){
+		filterIdInput.setText("");
+		filterFNInput.setText("");
+		filterLNInput.setText("");
+		filterAgeInput.setText("");
+	}
+	
+	public ArrayList<User> readFilter(){
+		String id = filterIdInput.getText();
+		String firstName = filterFNInput.getText();
+		String lastName = filterLNInput.getText();
+		String age = filterAgeInput.getText();
+		
+		if(chckbxId.isSelected()){
+			return RESTHandler.readIDJSON("http://localhost:8081/users/"+id);
+			
+		}else if(chckbxFirstName.isSelected() && chckbxLastName.isSelected() && chckbxAge.isSelected()){
+			return RESTHandler.readJSON("http://localhost:8081/fullName/?firstName="+firstName+"&lastName="+lastName+"&age="+age);
+		
+		} else if(chckbxFirstName.isSelected() && chckbxLastName.isSelected()){
+			return RESTHandler.readJSON("http://localhost:8081/fullName/?firstName="+firstName+"&lastName="+lastName);
+		
+		} else if(chckbxLastName.isSelected() && chckbxAge.isSelected()){
+			return RESTHandler.readJSON("http://localhost:8081/lastNameAndAge/?lastName="+lastName+"&age="+age);
+		
+		} else if(chckbxFirstName.isSelected() && chckbxAge.isSelected()){
+			return RESTHandler.readJSON("http://localhost:8081/firstNameAndAge/?firstName="+firstName+"&age="+age);
+		
+		} else if(chckbxFirstName.isSelected()){
+			return RESTHandler.readJSON("http://localhost:8081/firstName/"+firstName);
+		
+		} else if(chckbxLastName.isSelected()){
+			return RESTHandler.readJSON("http://localhost:8081/lastName/"+lastName);
+		
+		} else if(chckbxAge.isSelected()){
+			return RESTHandler.readJSON("http://localhost:8081/age/"+age);
+		
+		} else{
+			return null;
+		}	
+
 	}
 }
