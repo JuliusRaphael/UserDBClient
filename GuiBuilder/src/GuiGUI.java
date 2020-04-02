@@ -24,6 +24,9 @@ import javax.swing.JTable;
 import javax.swing.JTextArea;
 import javax.swing.JCheckBox;
 import java.awt.ScrollPane;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class GuiGUI extends JFrame {
@@ -39,7 +42,8 @@ public class GuiGUI extends JFrame {
 	private JTextField txtAge;
 	private JLabel lblEditadd;
 	private JTable table;
-
+	private ArrayList <User> users;
+	private ScrollPane scrollPane;
 
 	/**
 	 * Create the frame.
@@ -124,40 +128,73 @@ public class GuiGUI extends JFrame {
 		contentPane.add(lblEditadd);
 		
 		JButton btnNewButton = new JButton("Save");
-		btnNewButton.setBounds(430, 140, 67, 29);
+		btnNewButton.setBounds(414, 140, 83, 29);
 		contentPane.add(btnNewButton);
+        btnNewButton.addActionListener(new ActionListener() { 
+      	  public void actionPerformed(ActionEvent e) {
+      		  User t = new User (txtFirstName.getText(), txtLastName.getText(), txtAge.getText());
+
+      		  try {
+				RESTHandler.postRequest(t);
+      		  } catch (IOException | InterruptedException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+      		  }
+              users = RESTHandler.readJSON();
+              table = createTable(users);
+              scrollPane.add(table);
+      		  
+      	  } 
+      });
+		
+        JButton btnNewButton_1 = new JButton("Filter");
+        btnNewButton_1.setBounds(144, 140, 117, 29);
+        contentPane.add(btnNewButton_1);
+        
+        JButton btnNewButton_2 = new JButton("New");
+        btnNewButton_2.setBounds(353, 140, 61, 29);
+        contentPane.add(btnNewButton_2);
+        btnNewButton_2.addActionListener(new ActionListener() { 
+        	  public void actionPerformed(ActionEvent e) { 
+        		txtId.setText("");
+              	txtFirstName.setText("");
+              	txtLastName.setText("");
+              	txtAge.setText("");
+        	  } 
+        });
 		
 		JButton btnDelete = new JButton("Delete");
 		btnDelete.setBounds(495, 140, 67, 29);
 		contentPane.add(btnDelete);
+		btnDelete.addActionListener(new ActionListener() { 
+	      	  public void actionPerformed(ActionEvent e) {
+	      		  String t = table.getValueAt(table.getSelectedRow(), 0).toString();
+	      		  System.out.println("Delete: " + t.toString());
+	      	  } 
+	      });
 		
-        ScrollPane scrollPane = new ScrollPane();
+        scrollPane = new ScrollPane();
         scrollPane.setBounds(30, 174, 624, 294);
         contentPane.add(scrollPane);
 		
         
-        ArrayList <User> users = JSONHandler.readJSON();
-        
-        JTable table = createTable(users);
-   
+        users = RESTHandler.readJSON();
+        table = createTable(users);
         scrollPane.add(table);
         
-        JButton btnNewButton_1 = new JButton("Update");
-        btnNewButton_1.setBounds(144, 140, 117, 29);
-        contentPane.add(btnNewButton_1);
 	}
 
 
 	private JTable createTable(ArrayList<User> users) {
 		
-		
-        Object[][] data = new Object[users.size()][];
+		Object[][] data = new Object[users.size()][];
         for(int i = 0 ; i < users.size() ; i++){
         	data[i] = users.get(i).toList();
         }
         String[] columns = new String[] {"Id", "First Name", "Last Name", "Age"};
 
-        JTable table = new JTable(data, columns);
+        table = new JTable(data, columns);
+        
         //Select only one row at the time
         table.setSelectionModel(new ForcedListSelectionModel());
         
@@ -186,7 +223,7 @@ public class GuiGUI extends JFrame {
         });
         
         table.setBounds(30, 201, 624, 261);
-        
         return table;
 	}
+
 }
