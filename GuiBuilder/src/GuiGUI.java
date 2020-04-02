@@ -127,72 +127,81 @@ public class GuiGUI extends JFrame {
 		lblEditadd.setBounds(430, 20, 61, 16);
 		contentPane.add(lblEditadd);
 		
+		
+		
 		JButton btnNewButton = new JButton("Save");
 		btnNewButton.setBounds(414, 140, 83, 29);
 		contentPane.add(btnNewButton);
         btnNewButton.addActionListener(new ActionListener() { 
-      	  public void actionPerformed(ActionEvent e) {
-      		  User t = new User (txtFirstName.getText(), txtLastName.getText(), txtAge.getText());
-
-      		  try {
-				RESTHandler.postRequest(t);
-      		  } catch (IOException | InterruptedException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-      		  }
-              users = RESTHandler.readJSON();
-              table = createTable(users);
-              scrollPane.add(table);
+        	public void actionPerformed(ActionEvent e) {
       		  
-      	  } 
-      });
+        		User t = new User (txtId.getText(), txtFirstName.getText(), txtLastName.getText(), txtAge.getText());
+      		  		try{
+      		  			RESTHandler.postRequest(t);
+      		  
+      		  		} catch (IOException | InterruptedException e1) {
+      		  			e1.printStackTrace();
+      		  		}
+              
+      		  	readTable();	  
+      	  	} 
+        });
 		
+        
         JButton btnNewButton_1 = new JButton("Filter");
         btnNewButton_1.setBounds(144, 140, 117, 29);
         contentPane.add(btnNewButton_1);
+        
+        
         
         JButton btnNewButton_2 = new JButton("New");
         btnNewButton_2.setBounds(353, 140, 61, 29);
         contentPane.add(btnNewButton_2);
         btnNewButton_2.addActionListener(new ActionListener() { 
-        	  public void actionPerformed(ActionEvent e) { 
-        		txtId.setText("");
-              	txtFirstName.setText("");
-              	txtLastName.setText("");
-              	txtAge.setText("");
-        	  } 
+        	public void actionPerformed(ActionEvent e) { 
+        		emptyFields();
+        	} 
         });
 		
+        
+        
 		JButton btnDelete = new JButton("Delete");
 		btnDelete.setBounds(495, 140, 67, 29);
 		contentPane.add(btnDelete);
 		btnDelete.addActionListener(new ActionListener() { 
-	      	  public void actionPerformed(ActionEvent e) {
-	      		  String t = table.getValueAt(table.getSelectedRow(), 0).toString();
-	      		  System.out.println("Delete: " + t.toString());
+			public void actionPerformed(ActionEvent e) {
+				String t = table.getValueAt(table.getSelectedRow(), 0).toString();
+	      		try {
+					RESTHandler.deleteRequest(t);
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
+	      		readTable();
+	      		emptyFields();
 	      	  } 
-	      });
-		
-        scrollPane = new ScrollPane();
-        scrollPane.setBounds(30, 174, 624, 294);
-        contentPane.add(scrollPane);
+	     });
 		
         
-        users = RESTHandler.readJSON();
-        table = createTable(users);
-        scrollPane.add(table);
+		scrollPane = new ScrollPane();
+        scrollPane.setBounds(30, 174, 624, 294);
+        contentPane.add(scrollPane);
+        
+        readTable();
         
 	}
 
 
 	private JTable createTable(ArrayList<User> users) {
 		
+		//Set upp rows from ArrayList users
 		Object[][] data = new Object[users.size()][];
         for(int i = 0 ; i < users.size() ; i++){
         	data[i] = users.get(i).toList();
         }
+        //Name columns
         String[] columns = new String[] {"Id", "First Name", "Last Name", "Age"};
 
+        //Create table
         table = new JTable(data, columns);
         
         //Select only one row at the time
@@ -212,6 +221,7 @@ public class GuiGUI extends JFrame {
         table.getColumnModel().getColumn(2).setCellRenderer( centerRenderer );
         table.getColumnModel().getColumn(3).setCellRenderer( centerRenderer );
         
+        //Set up click on row loads to fields
         table.getSelectionModel().addListSelectionListener(new ListSelectionListener(){
             public void valueChanged(ListSelectionEvent event) {
             	txtId.setText(table.getValueAt(table.getSelectedRow(), 0).toString());
@@ -225,5 +235,17 @@ public class GuiGUI extends JFrame {
         table.setBounds(30, 201, 624, 261);
         return table;
 	}
+	
+	public void readTable(){		
+        users = RESTHandler.readJSON();
+        table = createTable(users);
+        scrollPane.add(table);
+	}
 
+	public void emptyFields(){
+		txtId.setText("");
+		txtFirstName.setText("");
+		txtLastName.setText("");
+		txtAge.setText("");
+	}
 }
