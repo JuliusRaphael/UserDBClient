@@ -18,6 +18,13 @@ public class User {
 	}
 	
 	
+	public User(String string, String string2, String string3, String string4) {
+		this.id = string;
+		this.firstName = string2;
+		this.lastName = string3;
+		this.age = string4;
+	}
+
 	public String getId() {
 		return id;
 	}
