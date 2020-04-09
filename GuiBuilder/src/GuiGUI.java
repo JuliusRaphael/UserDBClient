@@ -26,6 +26,8 @@ import javax.swing.JCheckBox;
 import java.awt.ScrollPane;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
@@ -70,18 +72,58 @@ public class GuiGUI extends JFrame {
 		chckbxId = new JCheckBox("Id");
 		chckbxId.setBounds(30, 48, 128, 23);
 		contentPane.add(chckbxId);
+		chckbxId.addItemListener(new ItemListener() {
+		    @Override
+		    public void itemStateChanged(ItemEvent e) {
+		        if (e.getStateChange() == ItemEvent.SELECTED) {
+		           
+		        } else {
+		        	filterIdInput.setText("");
+		        }
+		    }
+		});
 		
 		chckbxFirstName = new JCheckBox("First Name");
 		chckbxFirstName.setBounds(30, 69, 128, 23);
 		contentPane.add(chckbxFirstName);
+		chckbxFirstName.addItemListener(new ItemListener() {
+		    @Override
+		    public void itemStateChanged(ItemEvent e) {
+		        if (e.getStateChange() == ItemEvent.SELECTED) {
+		           
+		        } else {
+		        	filterFNInput.setText("");
+		        }
+		    }
+		});
 		
 		chckbxLastName = new JCheckBox("Last Name");
 		chckbxLastName.setBounds(30, 89, 128, 23);
 		contentPane.add(chckbxLastName);
+		chckbxLastName.addItemListener(new ItemListener() {
+		    @Override
+		    public void itemStateChanged(ItemEvent e) {
+		        if (e.getStateChange() == ItemEvent.SELECTED) {
+		           
+		        } else {
+		        	filterLNInput.setText("");
+		        }
+		    }
+		});
 		
 		chckbxAge = new JCheckBox("Age");
 		chckbxAge.setBounds(30, 111, 128, 23);
 		contentPane.add(chckbxAge);
+		chckbxAge.addItemListener(new ItemListener() {
+		    @Override
+		    public void itemStateChanged(ItemEvent e) {
+		        if (e.getStateChange() == ItemEvent.SELECTED) {
+		           
+		        } else {
+		        	filterAgeInput.setText("");
+		        }
+		    }
+		});
 		
 		filterIdInput = new JTextField();
 		filterIdInput.setBounds(134, 47, 130, 26);
@@ -200,7 +242,10 @@ public class GuiGUI extends JFrame {
         scrollPane.setBounds(30, 174, 624, 294);
         contentPane.add(scrollPane);
         
-        readTable();
+        table = new JTable();
+        scrollPane.add(table);
+        
+        //readTable();
         
 	}
 
@@ -301,8 +346,7 @@ public class GuiGUI extends JFrame {
 			return RESTHandler.readJSON("http://localhost:8081/age/"+age);
 		
 		} else{
-			return null;
+			return RESTHandler.readJSON();
 		}	
-
 	}
 }
