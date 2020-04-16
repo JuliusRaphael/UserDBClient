@@ -18,14 +18,14 @@ public class RESTHandler {
 	public static void postRequest(User u) throws IOException, InterruptedException {
 		HttpURLConnection con;
 		URL url;
-		
+		long start = System.currentTimeMillis();
 		
 		if(u.getId().equals("")){
 			url = new URL ("http://localhost:8081/users");
 			con = (HttpURLConnection)url.openConnection();
 			con.setRequestMethod("POST");
 		} else {
-			System.out.println("i update");
+			//System.out.println("i update");
 			url = new URL ("http://localhost:8081/users/"+u.getId());
 			con = (HttpURLConnection)url.openConnection();
 			con.setRequestMethod("PUT");
@@ -38,7 +38,7 @@ public class RESTHandler {
 		try(java.io.OutputStream os = con.getOutputStream()) {
 			
 			ObjectMapper objectMapper = new ObjectMapper();
-			System.out.println(objectMapper.writeValueAsString(u));
+			//System.out.println(objectMapper.writeValueAsString(u));
 			objectMapper.writeValue(os, u);     
 		}
 		
@@ -49,8 +49,10 @@ public class RESTHandler {
 				    while ((responseLine = br.readLine()) != null) {
 				        response.append(responseLine.trim());
 				    }
+				    long stop = System.currentTimeMillis();
 				    
-				    System.out.println(response.toString());
+				    System.out.println("Fetch took " + (stop - start) + "milisecs");
+				    //System.out.println(response.toString());
 		}
 		
 	}
@@ -70,10 +72,16 @@ public class RESTHandler {
 	public static ArrayList<User> readJSON(){
 		
         try {
+        	long start = System.currentTimeMillis();
+       
         	ObjectMapper objectMapper = new ObjectMapper();
         	objectMapper.configure(DeserializationFeature.USE_JAVA_ARRAY_FOR_JSON_ARRAY, true);
         	ArrayList<User> users = objectMapper.readValue(new URL("http://localhost:8081/users/"), new TypeReference<ArrayList<User>>(){});
-        	System.out.println(users.toString());
+        	//System.out.println(users.toString());
+        	
+        	long stop = System.currentTimeMillis();
+		    
+		    System.out.println("\nFetch took " + (stop - start) + "milisecs");
         	return users;
         	
     		
@@ -87,10 +95,16 @@ public class RESTHandler {
 
 	public static ArrayList<User> readJSON(String string) {
         try {
+        	long start = System.currentTimeMillis();
         	ObjectMapper objectMapper = new ObjectMapper();
         	objectMapper.configure(DeserializationFeature.USE_JAVA_ARRAY_FOR_JSON_ARRAY, true);
         	ArrayList<User> users = objectMapper.readValue(new URL(string), new TypeReference<ArrayList<User>>(){});
-        	System.out.println(users.toString());
+        	//System.out.println(users.toString());
+        	
+        	long stop = System.currentTimeMillis();
+		    
+		    System.out.println("\nFetch took " + (stop - start) + "milisecs");
+		    
         	return users;
         	
     		
@@ -104,11 +118,18 @@ public class RESTHandler {
 	
 	public static ArrayList<User> readIDJSON(String string) {
         try {
+        	long start = System.currentTimeMillis();
+        	
         	ObjectMapper objectMapper = new ObjectMapper();
         	User u = objectMapper.readValue(new URL(string), User.class); 
         	ArrayList<User> users = new ArrayList<User>();
         	users.add(u);
-        	System.out.println(users.toString());
+        	//System.out.println(users.toString());
+        	
+        	long stop = System.currentTimeMillis();
+		    
+		    System.out.println("\nFetch took " + (stop - start) + "milisecs");
+		    
         	return users;
         	
     		

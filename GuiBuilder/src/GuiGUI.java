@@ -190,7 +190,7 @@ public class GuiGUI extends JFrame {
       		  			e1.printStackTrace();
       		  		}
               
-      		  	readTable();	  
+      		  	//readTable();	  
       	  	} 
         });
 		
@@ -325,7 +325,7 @@ public class GuiGUI extends JFrame {
 			return RESTHandler.readIDJSON("http://localhost:8081/users/"+id);
 			
 		}else if(chckbxFirstName.isSelected() && chckbxLastName.isSelected() && chckbxAge.isSelected()){
-			return RESTHandler.readJSON("http://localhost:8081/fullName/?firstName="+firstName+"&lastName="+lastName+"&age="+age);
+			return RESTHandler.readJSON("http://localhost:8081/fullNameAndAge/?firstName="+firstName+"&lastName="+lastName+"&age="+age);
 		
 		} else if(chckbxFirstName.isSelected() && chckbxLastName.isSelected()){
 			return RESTHandler.readJSON("http://localhost:8081/fullName/?firstName="+firstName+"&lastName="+lastName);
