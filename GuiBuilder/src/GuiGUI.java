@@ -111,7 +111,7 @@ public class GuiGUI extends JFrame {
 		    }
 		});
 		
-		chckbxAge = new JCheckBox("Age");
+		chckbxAge = new JCheckBox("Age >=");
 		chckbxAge.setBounds(30, 111, 128, 23);
 		contentPane.add(chckbxAge);
 		chckbxAge.addItemListener(new ItemListener() {
@@ -319,9 +319,13 @@ public class GuiGUI extends JFrame {
 		String id = filterIdInput.getText();
 		String firstName = filterFNInput.getText();
 		String lastName = filterLNInput.getText();
-		int age = Integer.parseInt(filterAgeInput.getText());
-		System.out.println(age);
-		
+		int age;
+		if(filterAgeInput.getText().equals("")) {
+			age = 0;
+		}else {
+			age = Integer.parseInt(filterAgeInput.getText());
+		}
+
 		if(chckbxId.isSelected()){
 			return RESTHandler.readIDJSON("http://localhost:8081/users/"+id);
 			
