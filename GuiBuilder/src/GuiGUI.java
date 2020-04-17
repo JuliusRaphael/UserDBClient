@@ -300,7 +300,7 @@ public class GuiGUI extends JFrame {
         table = createTable(users);
         scrollPane.add(table);
 	}
-
+//hej
 	public void emptyFields(){
 		txtId.setText("");
 		txtFirstName.setText("");
