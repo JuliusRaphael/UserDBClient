@@ -25,7 +25,7 @@ public class RESTHandler {
 			con = (HttpURLConnection)url.openConnection();
 			con.setRequestMethod("POST");
 		} else {
-			System.out.println("i update");
+			//System.out.println("i update");
 			url = new URL ("http://localhost:8081/users/"+u.getId());
 			con = (HttpURLConnection)url.openConnection();
 			con.setRequestMethod("PUT");
@@ -65,16 +65,23 @@ public class RESTHandler {
 		con.setRequestProperty("Accept", "application/json");
 		con.setRequestMethod("DELETE");
 		int responseCode = con.getResponseCode();
-		System.out.println(responseCode);
+		//System.out.println(responseCode);
 	}
 	
 	public static ArrayList<User> readJSON(){
 		
         try {
+        	long start = System.currentTimeMillis();
+        	
         	ObjectMapper objectMapper = new ObjectMapper();
         	objectMapper.configure(DeserializationFeature.USE_JAVA_ARRAY_FOR_JSON_ARRAY, true);
         	ArrayList<User> users = objectMapper.readValue(new URL("http://localhost:8081/users/"), new TypeReference<ArrayList<User>>(){});
         	//System.out.println(users.toString());
+        	
+        	long stop = System.currentTimeMillis();
+        	
+        	System.out.println(stop - start + " millisecs");
+        	
         	return users;
         	
     		
@@ -108,10 +115,15 @@ public class RESTHandler {
 	
 	public static ArrayList<User> readIDJSON(String string) {
         try {
+        	long start = System.currentTimeMillis();
+        	
         	ObjectMapper objectMapper = new ObjectMapper();
         	User u = objectMapper.readValue(new URL(string), User.class); 
         	ArrayList<User> users = new ArrayList<User>();
         	users.add(u);
+        	
+        	long stop = System.currentTimeMillis();
+        	System.out.println(stop - start + " millisecs");
         	//System.out.println(users.toString());
         	return users;
         	

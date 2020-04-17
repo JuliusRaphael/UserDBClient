@@ -190,7 +190,7 @@ public class GuiGUI extends JFrame {
       		  			e1.printStackTrace();
       		  		}
               
-      		  	readTable();	  
+      		  	//readTable();	  
       	  	} 
         });
 		
