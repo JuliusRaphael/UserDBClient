@@ -3,7 +3,7 @@ public class User {
 	private String id;
 	private String firstName;
 	private String lastName;
-	private String age;
+	private int age;
 	
 	
 
@@ -11,14 +11,14 @@ public class User {
 		
 	}
 	
-	public User(String firstName, String lastName, String age) {
+	public User(String firstName, String lastName, int age) {
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.age = age;
 	}
 	
 	
-	public User(String string, String string2, String string3, String string4) {
+	public User(String string, String string2, String string3, int string4) {
 		this.id = string;
 		this.firstName = string2;
 		this.lastName = string3;
@@ -46,11 +46,11 @@ public class User {
 		this.lastName = lastName;
 	}
 	
-	public String getAge() {
+	public int getAge() {
 		return age;
 	}
 
-	public void setAge(String age) {
+	public void setAge(int age) {
 		this.age = age;
 	}
 	

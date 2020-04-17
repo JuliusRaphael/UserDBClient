@@ -19,7 +19,7 @@ public class RESTHandler {
 		HttpURLConnection con;
 		URL url;
 		
-		
+		long start = System.currentTimeMillis();
 		if(u.getId().equals("")){
 			url = new URL ("http://localhost:8081/users");
 			con = (HttpURLConnection)url.openConnection();
@@ -38,7 +38,7 @@ public class RESTHandler {
 		try(java.io.OutputStream os = con.getOutputStream()) {
 			
 			ObjectMapper objectMapper = new ObjectMapper();
-			System.out.println(objectMapper.writeValueAsString(u));
+			//System.out.println(objectMapper.writeValueAsString(u));
 			objectMapper.writeValue(os, u);     
 		}
 		
@@ -49,8 +49,9 @@ public class RESTHandler {
 				    while ((responseLine = br.readLine()) != null) {
 				        response.append(responseLine.trim());
 				    }
-				    
-				    System.out.println(response.toString());
+		        	long stop = System.currentTimeMillis();
+		        	System.out.println(stop - start + " millisecs");
+				    //System.out.println(response.toString());
 		}
 		
 	}
@@ -73,7 +74,7 @@ public class RESTHandler {
         	ObjectMapper objectMapper = new ObjectMapper();
         	objectMapper.configure(DeserializationFeature.USE_JAVA_ARRAY_FOR_JSON_ARRAY, true);
         	ArrayList<User> users = objectMapper.readValue(new URL("http://localhost:8081/users/"), new TypeReference<ArrayList<User>>(){});
-        	System.out.println(users.toString());
+        	//System.out.println(users.toString());
         	return users;
         	
     		
@@ -87,10 +88,13 @@ public class RESTHandler {
 
 	public static ArrayList<User> readJSON(String string) {
         try {
+        	long start = System.currentTimeMillis();
         	ObjectMapper objectMapper = new ObjectMapper();
         	objectMapper.configure(DeserializationFeature.USE_JAVA_ARRAY_FOR_JSON_ARRAY, true);
         	ArrayList<User> users = objectMapper.readValue(new URL(string), new TypeReference<ArrayList<User>>(){});
-        	System.out.println(users.toString());
+        	//System.out.println(users.toString());
+        	long stop = System.currentTimeMillis();
+        	System.out.println(stop - start + " millisecs");
         	return users;
         	
     		
@@ -108,7 +112,7 @@ public class RESTHandler {
         	User u = objectMapper.readValue(new URL(string), User.class); 
         	ArrayList<User> users = new ArrayList<User>();
         	users.add(u);
-        	System.out.println(users.toString());
+        	//System.out.println(users.toString());
         	return users;
         	
     		

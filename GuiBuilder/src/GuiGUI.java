@@ -182,7 +182,7 @@ public class GuiGUI extends JFrame {
         btnNewButton.addActionListener(new ActionListener() { 
         	public void actionPerformed(ActionEvent e) {
       		  
-        		User t = new User (txtId.getText(), txtFirstName.getText(), txtLastName.getText(), txtAge.getText());
+        		User t = new User (txtId.getText(), txtFirstName.getText(), txtLastName.getText(), Integer.parseInt(txtAge.getText()));
       		  		try{
       		  			RESTHandler.postRequest(t);
       		  
@@ -319,13 +319,14 @@ public class GuiGUI extends JFrame {
 		String id = filterIdInput.getText();
 		String firstName = filterFNInput.getText();
 		String lastName = filterLNInput.getText();
-		String age = filterAgeInput.getText();
+		int age = Integer.parseInt(filterAgeInput.getText());
+		System.out.println(age);
 		
 		if(chckbxId.isSelected()){
 			return RESTHandler.readIDJSON("http://localhost:8081/users/"+id);
 			
 		}else if(chckbxFirstName.isSelected() && chckbxLastName.isSelected() && chckbxAge.isSelected()){
-			return RESTHandler.readJSON("http://localhost:8081/fullName/?firstName="+firstName+"&lastName="+lastName+"&age="+age);
+			return RESTHandler.readJSON("http://localhost:8081/fullNameAndAge/?firstName="+firstName+"&lastName="+lastName+"&age="+age);
 		
 		} else if(chckbxFirstName.isSelected() && chckbxLastName.isSelected()){
 			return RESTHandler.readJSON("http://localhost:8081/fullName/?firstName="+firstName+"&lastName="+lastName);
