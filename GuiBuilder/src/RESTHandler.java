@@ -21,12 +21,12 @@ public class RESTHandler {
 		
 		long start = System.currentTimeMillis();
 		if(u.getId().equals("")){
-			url = new URL ("http://localhost:8081/users");
+			url = new URL ("https://localhost:8443/users");
 			con = (HttpURLConnection)url.openConnection();
 			con.setRequestMethod("POST");
 		} else {
 			//System.out.println("i update");
-			url = new URL ("http://localhost:8081/users/"+u.getId());
+			url = new URL ("https://localhost:8443/users/"+u.getId());
 			con = (HttpURLConnection)url.openConnection();
 			con.setRequestMethod("PUT");
 		}
@@ -58,7 +58,7 @@ public class RESTHandler {
 	
 	public static void deleteRequest(String s) throws IOException{
 	
-		URL url = new URL("http://localhost:8081/users/"+s);
+		URL url = new URL("https://localhost:8443/users/"+s);
 		HttpURLConnection con = (HttpURLConnection) url.openConnection();
 		con.setDoOutput(true);
 		con.setRequestProperty("Content-Type", "application/json; utf-8");
@@ -75,7 +75,7 @@ public class RESTHandler {
         	
         	ObjectMapper objectMapper = new ObjectMapper();
         	objectMapper.configure(DeserializationFeature.USE_JAVA_ARRAY_FOR_JSON_ARRAY, true);
-        	ArrayList<User> users = objectMapper.readValue(new URL("http://localhost:8081/users/"), new TypeReference<ArrayList<User>>(){});
+        	ArrayList<User> users = objectMapper.readValue(new URL("https://localhost:8443/users/"), new TypeReference<ArrayList<User>>(){});
         	//System.out.println(users.toString());
         	
         	long stop = System.currentTimeMillis();
