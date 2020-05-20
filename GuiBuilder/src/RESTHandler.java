@@ -1,8 +1,8 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URL;
+import javax.net.ssl.HttpsURLConnection;
 import java.util.ArrayList;
 
 
@@ -16,18 +16,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 public class RESTHandler {
 
 	public static void postRequest(User u) throws IOException, InterruptedException {
-		HttpURLConnection con;
+		HttpsURLConnection con;
 		URL url;
 		
 		long start = System.currentTimeMillis();
 		if(u.getId().equals("")){
 			url = new URL ("https://localhost:8443/users");
-			con = (HttpURLConnection)url.openConnection();
+			con = (HttpsURLConnection)url.openConnection();
 			con.setRequestMethod("POST");
 		} else {
 			//System.out.println("i update");
 			url = new URL ("https://localhost:8443/users/"+u.getId());
-			con = (HttpURLConnection)url.openConnection();
+			con = (HttpsURLConnection)url.openConnection();
 			con.setRequestMethod("PUT");
 		}
 		
@@ -59,7 +59,7 @@ public class RESTHandler {
 	public static void deleteRequest(String s) throws IOException{
 	
 		URL url = new URL("https://localhost:8443/users/"+s);
-		HttpURLConnection con = (HttpURLConnection) url.openConnection();
+		HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
 		con.setDoOutput(true);
 		con.setRequestProperty("Content-Type", "application/json; utf-8");
 		con.setRequestProperty("Accept", "application/json");
