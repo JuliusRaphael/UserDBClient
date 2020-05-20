@@ -327,28 +327,28 @@ public class GuiGUI extends JFrame {
 		}
 
 		if(chckbxId.isSelected()){
-			return RESTHandler.readIDJSON("http://localhost:8081/users/"+id);
+			return RESTHandler.readIDJSON("https://localhost:8443/users/"+id);
 			
 		}else if(chckbxFirstName.isSelected() && chckbxLastName.isSelected() && chckbxAge.isSelected()){
-			return RESTHandler.readJSON("http://localhost:8081/fullNameAndAge/?firstName="+firstName+"&lastName="+lastName+"&age="+age);
+			return RESTHandler.readJSON("https://localhost:8443/fullNameAndAge/?firstName="+firstName+"&lastName="+lastName+"&age="+age);
 		
 		} else if(chckbxFirstName.isSelected() && chckbxLastName.isSelected()){
-			return RESTHandler.readJSON("http://localhost:8081/fullName/?firstName="+firstName+"&lastName="+lastName);
+			return RESTHandler.readJSON("https://localhost:8443/fullName/?firstName="+firstName+"&lastName="+lastName);
 		
 		} else if(chckbxLastName.isSelected() && chckbxAge.isSelected()){
-			return RESTHandler.readJSON("http://localhost:8081/lastNameAndAge/?lastName="+lastName+"&age="+age);
+			return RESTHandler.readJSON("https://localhost:8443/lastNameAndAge/?lastName="+lastName+"&age="+age);
 		
 		} else if(chckbxFirstName.isSelected() && chckbxAge.isSelected()){
-			return RESTHandler.readJSON("http://localhost:8081/firstNameAndAge/?firstName="+firstName+"&age="+age);
+			return RESTHandler.readJSON("https://localhost:8443/firstNameAndAge/?firstName="+firstName+"&age="+age);
 		
 		} else if(chckbxFirstName.isSelected()){
-			return RESTHandler.readJSON("http://localhost:8081/firstName/"+firstName);
+			return RESTHandler.readJSON("https://localhost:8443/firstName/"+firstName);
 		
 		} else if(chckbxLastName.isSelected()){
-			return RESTHandler.readJSON("http://localhost:8081/lastName/"+lastName);
+			return RESTHandler.readJSON("https://localhost:8443/lastName/"+lastName);
 		
 		} else if(chckbxAge.isSelected()){
-			return RESTHandler.readJSON("http://localhost:8081/age/"+age);
+			return RESTHandler.readJSON("https://localhost:8443/age/"+age);
 		
 		} else{
 			return RESTHandler.readJSON();
