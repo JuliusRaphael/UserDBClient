@@ -52,10 +52,6 @@ public class GuiGUI extends JFrame {
 	private JCheckBox chckbxAge;
 	
 	
-	/**
-	 * Create the frame.
-	 * @param s 
-	 */
 	public GuiGUI() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 679, 490);
@@ -65,10 +61,12 @@ public class GuiGUI extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+		//Serach label
 		JLabel lblNewLabel = new JLabel("Search:");
 		lblNewLabel.setBounds(20, 20, 61, 16);
 		contentPane.add(lblNewLabel);
 		
+		//Checkboxes for different filters with listeners - if checkBox is unchecked add empty string to textFiled next to it
 		chckbxId = new JCheckBox("Id");
 		chckbxId.setBounds(30, 48, 128, 23);
 		contentPane.add(chckbxId);
@@ -125,6 +123,8 @@ public class GuiGUI extends JFrame {
 		    }
 		});
 		
+		
+		//Textfields for inputs in filter next to checkboxes
 		filterIdInput = new JTextField();
 		filterIdInput.setBounds(134, 47, 130, 26);
 		contentPane.add(filterIdInput);
@@ -145,6 +145,8 @@ public class GuiGUI extends JFrame {
 		filterAgeInput.setBounds(134, 110, 130, 26);
 		contentPane.add(filterAgeInput);
 		
+		
+		//Textfields for inputs for creating/editing users
 		txtId = new JTextField(64);
 		txtId.setEditable(false);
 		txtId.setText("Id");
@@ -175,31 +177,34 @@ public class GuiGUI extends JFrame {
 		contentPane.add(lblEditadd);
 		
 		
-		
+		//"Save" Button
 		JButton btnNewButton = new JButton("Save");
 		btnNewButton.setBounds(414, 140, 83, 29);
 		contentPane.add(btnNewButton);
         btnNewButton.addActionListener(new ActionListener() { 
         	public void actionPerformed(ActionEvent e) {
-      		  
+      		  	//If clicked - create new user with information in textFields
         		User t = new User (txtId.getText(), txtFirstName.getText(), txtLastName.getText(), Integer.parseInt(txtAge.getText()));
       		  		try{
+      		  			//Send user to DB through RESTHandler
       		  			RESTHandler.postRequest(t);
       		  
       		  		} catch (IOException | InterruptedException e1) {
       		  			e1.printStackTrace();
       		  		}
               
-      		  	//readTable();	  
+      		  	users = readFilter();
+      	        table = createTable(users);	  
       	  	} 
         });
 		
         
-        
+        //"Serach" button
         JButton btnNewButton_1 = new JButton("Search");
         btnNewButton_1.setBounds(144, 140, 117, 29);
         contentPane.add(btnNewButton_1);
         btnNewButton_1.addActionListener(new ActionListener() { 
+        	//When clicked - read filters - store in users - and redo table
         	public void actionPerformed(ActionEvent e) { 
         		users = readFilter();
         		table = createTable(users);
@@ -209,22 +214,24 @@ public class GuiGUI extends JFrame {
         });
         
         
-        
+        //"New" button
         JButton btnNewButton_2 = new JButton("New");
         btnNewButton_2.setBounds(353, 140, 61, 29);
         contentPane.add(btnNewButton_2);
         btnNewButton_2.addActionListener(new ActionListener() { 
+        	//When clicked empty all fields 
         	public void actionPerformed(ActionEvent e) { 
         		emptyFields();
         	} 
         });
 		
         
-        
+        //"Delete" Button
 		JButton btnDelete = new JButton("Delete");
 		btnDelete.setBounds(495, 140, 67, 29);
 		contentPane.add(btnDelete);
 		btnDelete.addActionListener(new ActionListener() { 
+			//When clicked - get user ID from selected row in table - send delete request through RESTHandler
 			public void actionPerformed(ActionEvent e) {
 				String t = table.getValueAt(table.getSelectedRow(), 0).toString();
 	      		try {
@@ -232,24 +239,21 @@ public class GuiGUI extends JFrame {
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
+	      		//After deletion present empty table
 	      		readTable();
 	      		emptyFields();
 	      	  } 
 	     });
 		
-        
+        //Sets up scrollPane for table to present results
 		scrollPane = new ScrollPane();
         scrollPane.setBounds(30, 174, 624, 294);
         contentPane.add(scrollPane);
-        
         table = new JTable();
         scrollPane.add(table);
-        
-        //readTable();
-        
 	}
 
-
+	//Takes arrayList of User and sets up the table to present the users
 	private JTable createTable(ArrayList<User> users) {
 		
 		//Set upp rows from ArrayList users
@@ -295,12 +299,14 @@ public class GuiGUI extends JFrame {
         return table;
 	}
 	
+	//Reading all users in DB to table
 	public void readTable(){		
         users = RESTHandler.readJSON();
         table = createTable(users);
         scrollPane.add(table);
 	}
-//hej
+
+	//Empty Crud-update-delete fields
 	public void emptyFields(){
 		txtId.setText("");
 		txtFirstName.setText("");
@@ -308,6 +314,7 @@ public class GuiGUI extends JFrame {
 		txtAge.setText("");
 	}
 	
+	//Empty filtering textfields
 	public void emptyFilters(){
 		filterIdInput.setText("");
 		filterFNInput.setText("");
@@ -315,7 +322,10 @@ public class GuiGUI extends JFrame {
 		filterAgeInput.setText("");
 	}
 	
+	//Reading filters and sending read request through RESTHandler
 	public ArrayList<User> readFilter(){
+		
+		//Read filter textfileds to variables
 		String id = filterIdInput.getText();
 		String firstName = filterFNInput.getText();
 		String lastName = filterLNInput.getText();
@@ -326,6 +336,8 @@ public class GuiGUI extends JFrame {
 			age = Integer.parseInt(filterAgeInput.getText());
 		}
 
+		
+		//Depending on which checkBoxes that are selected, use RESTHandler to connect to correct REST endpoint
 		if(chckbxId.isSelected()){
 			return RESTHandler.readIDJSON("http://localhost:8081/users/"+id);
 			
